@@ -1,3 +1,3 @@
 <footer class="bg-light text-center">
-    <span id="root"></span>
+    <span id="rooting">© 2024</span>
 </footer>
