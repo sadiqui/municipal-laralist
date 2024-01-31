@@ -22,7 +22,7 @@ class PublicationController extends Controller
     public function index()
     {
         $publications = Publication::latest()->paginate();
-        
+
         return view('publication.index',compact('publications'));
     }
 
@@ -48,7 +48,7 @@ class PublicationController extends Controller
         $this->uploadImage($request,$formFields);
         $formFields['profile_id'] = Auth::id();
         Publication::create($formFields);
-        
+
         return to_route('publications.index')->with('success','La publica à bien été publiée');;
     }
     private function uploadImage(PublicationRequest $request,array &$formFields){

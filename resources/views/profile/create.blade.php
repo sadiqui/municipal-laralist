@@ -1,4 +1,4 @@
-<x-master title="Mon Profile"><h3>Ajouter profile</h3>
+<x-master title="Mon Profile"><h3>Ajouter membre</h3>
   @if ($errors->any())
   <x-alert type="danger">
     <h6>Errors : </h6>
@@ -15,14 +15,14 @@
             <label class="form-label">Nom complet</label>
             <input type="text" name="name" class="form-control" value="{{ old('name') }}">
             @error('name')
-              <div class="text-danger">{{$message}}</div>  
+              <div class="text-danger">{{$message}}</div>
             @enderror
           </div>
           <div class="mb-3">
             <label class="form-label">Email</label>
             <input type="text" name="email" class="form-control" value="{{ old('email') }}">
             @error('email')
-            <div class="text-danger">{{$message}}</div>  
+            <div class="text-danger">{{$message}}</div>
           @enderror
           </div>
           <div class="mb-3">

@@ -1,5 +1,5 @@
 
-<x-master title="Publications"><h3>Publications</h3>
+<x-master title="Publications"><h3>Livres</h3>
 <div class="container w-75 mx-auto">
     <div class="row">
     @foreach ($publications as $publication)

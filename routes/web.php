@@ -25,12 +25,14 @@ Route::resource('publications',PublicationController::class);
 
 Route::get('/', [homeController::class,'index'])->name('homepage');
 
+// laravel/ui: start
 Route::middleware('guest')->group(function(){
     Route::get('/login', [LoginController::class,'show'])->name('login.show');
     Route::post('/login', [LoginController::class,'login'])->name('login');
-    
+
 });
 Route::get('/logout', [LoginController::class,'logout'])->name('login.logout')->middleware('auth');
+// laravel/ui: end
 
 Route::get('/salam',function(){
     return response()->download('storage/profile/profile.png','',[],'inline');
@@ -48,7 +50,7 @@ Route::get('/headers',function(Request $request){
     $response = new Response(['data'=>'ok']);
     return $response->withHeaders([
         'Content-Type' => 'Application/json',
-        'X-Mouad'=> "Yes"
+        'X-Sadiqui'=> "Yes"
     ]);
 });
 Route::get('/request',function(Request $request){

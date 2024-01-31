@@ -23,21 +23,21 @@ class LoginController extends Controller
 
         if(Auth::attempt($credentials)){
             $profile = Auth::user();
-             // Connectewh
+             // Nconnectew
             if(($profile->hasVerifiedEmail())){
-            $request->session()->regenerate(true); 
+            $request->session()->regenerate(true);
              return to_route('homepage')->with('success', 'Vous êtes bien connecté '.$login." .");
 
             }else{
-                $request->session()->invalidate(); 
+                $request->session()->invalidate();
                 $profile = Auth::user();
                 Mail::to($profile->email)->send(new profileMail($profile));
               return back()->withErrors([
                 'login'=> 'Merci de vérifier votre Email pour activer votre compte '.$profile->email
-            ])->onlyInput('login');  
+            ])->onlyInput('login');
             }
         }else{
-            // shi haja ghalta
+            // Shi haja mahiyach
             return back()->withErrors([
                 'login'=> 'Email ou mot de passe incorrect.'
             ])->onlyInput('login');
