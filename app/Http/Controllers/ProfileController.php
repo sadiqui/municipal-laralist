@@ -12,51 +12,55 @@ use Illuminate\Support\Facades\Cache;
 
 class ProfileController extends Controller
 {
-    public  function index()
+    public function index()
     {
-        $profiles = Cache::remember('profiles', 10, function() {
+        $profiles = Cache::remember('profiles', 10, function () {
             return Profile::paginate(9);
         });
 
-        return view('profile.index',compact('profiles'));
+        return view('profile.index', compact('profiles'));
     }
-    public function show(string $id){
-        $profile = Cache::remember('profile_'.$id, 10, function() use ($id) {
+    public function show(string $id)
+    {
+        $profile = Cache::remember('profile_' . $id, 10, function () use ($id) {
             return Profile::findOrFail($id);
         });
-        
-        return view('profile.show',compact('profile'));
+
+        return view('profile.show', compact('profile'));
     }
-    public function create(){
+    public function create()
+    {
         return view('profile.create');
     }
 
-    public function store(ProfileRequest $request){
-        // Validation 
+    public function store(ProfileRequest $request)
+    {
+        // Validation
         $formFields = $request->validated();
 
         // Hash/Cryptage
         $formFields['password'] = Hash::make($request->password);
 
-        $this->uploadImage($request,$formFields);
-        
+        $this->uploadImage($request, $formFields);
+
         // Insertion
         $profile = Profile::create($formFields);
 
         Mail::to($profile->email)->send(new profileMail($profile));
         // Redirection
-        return redirect()->route('profiles.index')->with('success','Votre compte est bien créé.');
+        return redirect()->route('profiles.index')->with('success', 'Un nouveau membre est bien ajouté.');
     }
 
-    public function verifyEmail(Request $request){
-        [$createdAt,$id] = explode('///',base64_decode($request->hash));
+    public function verifyEmail(Request $request)
+    {
+        [$createdAt, $id] = explode('///', base64_decode($request->hash));
         $profile = Profile::findOrFail($id);
 
-        if($profile->created_at->toDateTimeString() !== $createdAt){
+        if ($profile->created_at->toDateTimeString() !== $createdAt) {
             abort(403);
         }
 
-        if($profile->email_verified_at !== NULL) {
+        if ($profile->email_verified_at !== NULL) {
             return response('Compte déja activé');
         }
 
@@ -67,35 +71,36 @@ class ProfileController extends Controller
         ])->save();
 
 
-        return view('profile.email_verified',compact('name','email'));
+        return view('profile.email_verified', compact('name', 'email'));
     }
     public function destroy(Profile $profile)
     {
         $profile->delete();
-        
-        return to_route('profiles.index')->with('success','Le Profile à bien été supprimé');
+
+        return to_route('profiles.index')->with('success', 'Le membre a bien été supprimé');
     }
 
     public function edit(Profile $profile)
     {
-        return view('profile.edit',compact('profile'));
+        return view('profile.edit', compact('profile'));
     }
 
-    public function update(ProfileRequest $request,Profile $profile)
+    public function update(ProfileRequest $request, Profile $profile)
     {
         $formFields = $request->validated();
         // Hash/Cryptage
         $formFields['password'] = Hash::make($request->password);
-        $this->uploadImage($request,$formFields);
+        $this->uploadImage($request, $formFields);
         $profile->fill($formFields)->save();
 
-        return to_route('profiles.edit',$profile->id)->with('success','Le Profile à bien été modifié');
+        return to_route('profiles.edit', $profile->id)->with('success', 'Le membre a bien été modifié');
 
     }
-    private function uploadImage(ProfileRequest $request,array &$formFields){
+    private function uploadImage(ProfileRequest $request, array &$formFields)
+    {
         unset($formFields['image']);
-        if($request->hasFile('image')){
-            $formFields['image'] = $request->file('image')->store('profile','public');
+        if ($request->hasFile('image')) {
+            $formFields['image'] = $request->file('image')->store('profile', 'public');
         }
     }
 }

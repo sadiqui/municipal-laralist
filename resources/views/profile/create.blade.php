@@ -1,4 +1,4 @@
-<x-master title="Mon Profile"><h3>Ajouter membre</h3>
+<x-master title="Mon Profile"><h3>Ajouter profile</h3>
   @if ($errors->any())
   <x-alert type="danger">
     <h6>Errors : </h6>
